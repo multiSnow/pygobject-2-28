@@ -178,7 +178,6 @@ AC_SUBST([PYTHON_BASENAME])
 pygobject_CODEGEN_DEFINES=""
 AC_SUBST([pygobject_CODEGEN_DEFINES])
 
-AS_AC_EXPAND(DATADIR, $datadir)
 
 dnl libffi
 AC_MSG_CHECKING(for ffi)
