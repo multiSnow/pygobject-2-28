@@ -182,9 +182,6 @@ pygobject_register_sinkfunc(GType type, void (* sinkfunc)(GObject *object))
 {
     SinkFunc sf;
 
-    g_message ("pygobject_register_sinkfunc is deprecated (%s)",
-               g_type_name(type));
-
 #if 0
     g_return_if_fail(G_TYPE_IS_OBJECT(type));
 #endif
