@@ -52,11 +52,7 @@ AC_SUBST(PYTHON_CFLAGS)
 # check if the headers exist:
 save_CPPFLAGS="$CPPFLAGS"
 CPPFLAGS="$CPPFLAGS $PYTHON_CFLAGS"
-AC_TRY_CPP([#include <Python.h>],
-[AC_MSG_RESULT(found)
-$1],
-[AC_MSG_RESULT(not found)
-$2])
+AC_CHECK_HEADER([Python.h])
 CPPFLAGS="$save_CPPFLAGS"
 ])
 
