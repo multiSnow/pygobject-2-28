@@ -42,17 +42,11 @@ fi
 AC_DEFUN([AM_CHECK_PYTHON_HEADERS],
 [AC_REQUIRE([AM_PATH_PYTHON])
 AC_MSG_CHECKING(for headers required to compile python extensions)
-# deduce PYTHON_CFLAGS
-py_prefix=`$PYTHON -c "import sys; sys.stdout.write(sys.prefix)"`
-py_exec_prefix=`$PYTHON -c "import sys; sys.stdout.write(sys.exec_prefix)"`
 PYTHON_CONFIG=`which $PYTHON`-config
 if test -x "$PYTHON_CONFIG"; then
 PYTHON_CFLAGS=`$PYTHON_CONFIG --includes 2>/dev/null`
 else
-PYTHON_CFLAGS="-I${py_prefix}/include/python${PYTHON_VERSION}"
-if test "$py_prefix" != "$py_exec_prefix"; then
-  PYTHON_CFLAGS="$PYTHON_CFLAGS -I${py_exec_prefix}/include/python${PYTHON_VERSION}"
-fi
+PYTHON_CFLAGS=`pkg-config python-${PYTHON_VERSION} --cflags`
 fi
 AC_SUBST(PYTHON_CFLAGS)
 # check if the headers exist:
