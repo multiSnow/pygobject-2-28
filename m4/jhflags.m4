@@ -1,8 +1,8 @@
-dnl
-dnl JH_ADD_CFLAG(FLAG)
-dnl checks whether the C compiler supports the given flag, and if so, adds
-dnl it to $CFLAGS.  If the flag is already present in the list, then the
-dnl check is not performed.
+#
+# JH_ADD_CFLAG(FLAG)
+# checks whether the C compiler supports the given flag, and if so, adds
+# it to $CFLAGS.  If the flag is already present in the list, then the
+# check is not performed.
 AC_DEFUN([JH_ADD_CFLAG],
 [
 case " $CFLAGS " in

@@ -1,6 +1,6 @@
 ## this one is commonly used with AM_PATH_PYTHONDIR ...
-dnl AM_CHECK_PYMOD(MODNAME [,SYMBOL [,ACTION-IF-FOUND [,ACTION-IF-NOT-FOUND]]])
-dnl Check if a module containing a given symbol is visible to python.
+# AM_CHECK_PYMOD(MODNAME [,SYMBOL [,ACTION-IF-FOUND [,ACTION-IF-NOT-FOUND]]])
+# Check if a module containing a given symbol is visible to python.
 AC_DEFUN([AM_CHECK_PYMOD],
 [AC_REQUIRE([AM_PATH_PYTHON])
 py_mod_var=`echo $1['_']$2 | sed 'y%./+-%__p_%'`
@@ -28,21 +28,21 @@ py_val=`eval "echo \`echo '$py_cv_mod_'$py_mod_var\`"`
 if test "x$py_val" != xno; then
   AC_MSG_RESULT(yes)
   ifelse([$3], [],, [$3
-])dnl
+])
 else
   AC_MSG_RESULT(no)
   ifelse([$4], [],, [$4
-])dnl
+])
 fi
 ])
 
-dnl a macro to check for ability to create python extensions
-dnl  AM_CHECK_PYTHON_HEADERS([ACTION-IF-POSSIBLE], [ACTION-IF-NOT-POSSIBLE])
-dnl function also defines PYTHON_INCLUDES
+# a macro to check for ability to create python extensions
+#  AM_CHECK_PYTHON_HEADERS([ACTION-IF-POSSIBLE], [ACTION-IF-NOT-POSSIBLE])
+# function also defines PYTHON_INCLUDES
 AC_DEFUN([AM_CHECK_PYTHON_HEADERS],
 [AC_REQUIRE([AM_PATH_PYTHON])
 AC_MSG_CHECKING(for headers required to compile python extensions)
-dnl deduce PYTHON_INCLUDES
+# deduce PYTHON_INCLUDES
 py_prefix=`$PYTHON -c "import sys; sys.stdout.write(sys.prefix)"`
 py_exec_prefix=`$PYTHON -c "import sys; sys.stdout.write(sys.exec_prefix)"`
 PYTHON_CONFIG=`which $PYTHON`-config
@@ -55,12 +55,12 @@ if test "$py_prefix" != "$py_exec_prefix"; then
 fi
 fi
 AC_SUBST(PYTHON_INCLUDES)
-dnl check if the headers exist:
+# check if the headers exist:
 save_CPPFLAGS="$CPPFLAGS"
 CPPFLAGS="$CPPFLAGS $PYTHON_INCLUDES"
-AC_TRY_CPP([#include <Python.h>],dnl
+AC_TRY_CPP([#include <Python.h>],
 [AC_MSG_RESULT(found)
-$1],dnl
+$1],
 [AC_MSG_RESULT(not found)
 $2])
 CPPFLAGS="$save_CPPFLAGS"
@@ -116,21 +116,20 @@ sys.exit(sys.hexversion < minverhex)"
 # numbers and dots only.
 AC_DEFUN([JD_PATH_PYTHON],
  [
-  dnl Find a Python interpreter.  Python versions prior to 2.0 are not
-  dnl supported
+  # Find a Python interpreter.  Python versions prior to 2.0 are not
+  # supported
   m4_define_default([_AM_PYTHON_INTERPRETER_LIST],
-                    [python python2 python3 python3.0 python2.5 python2.4 python2.3 python2.2 dnl
-python2.1 python2.0])
+                    [python python2 python3 python3.0 python2.5 python2.4 python2.3 python2.2 python2.1 python2.0])
 
   m4_if([$1],[],[
-    dnl No version check is needed.
+    # No version check is needed.
     # Find any Python interpreter.
     if test -z "$PYTHON"; then
       AC_PATH_PROGS([PYTHON], _AM_PYTHON_INTERPRETER_LIST, :)
     fi
     am_display_PYTHON=python
   ], [
-    dnl A version check is needed.
+    # A version check is needed.
     if test -n "$PYTHON"; then
       # If the user set $PYTHON, use it and don't search something else.
       AC_MSG_CHECKING([whether $PYTHON version >= $1])
@@ -158,71 +157,71 @@ python2.1 python2.0])
   ])
 
   if test "$PYTHON" = :; then
-  dnl Run any user-specified action, or abort.
+  # Run any user-specified action, or abort.
     m4_default([$3], [AC_MSG_ERROR([no suitable Python interpreter found])])
   else
 
-  dnl Query Python for its version number.  Getting [:3] seems to be
-  dnl the best way to do this; it's what "site.py" does in the standard
-  dnl library.
+  # Query Python for its version number.  Getting [:3] seems to be
+  # the best way to do this; it's what "site.py" does in the standard
+  # library.
 
   AC_CACHE_CHECK([for $am_display_PYTHON version], [am_cv_python_version],
     [am_cv_python_version=`$PYTHON -c "import sys; sys.stdout.write(sys.version[[:3]])"`])
   AC_SUBST([PYTHON_VERSION], [$am_cv_python_version])
 
-  dnl Use the values of $prefix and $exec_prefix for the corresponding
-  dnl values of PYTHON_PREFIX and PYTHON_EXEC_PREFIX.  These are made
-  dnl distinct variables so they can be overridden if need be.  However,
-  dnl general consensus is that you shouldn't need this ability.
+  # Use the values of $prefix and $exec_prefix for the corresponding
+  # values of PYTHON_PREFIX and PYTHON_EXEC_PREFIX.  These are made
+  # distinct variables so they can be overridden if need be.  However,
+  # general consensus is that you shouldn't need this ability.
 
   AC_SUBST([PYTHON_PREFIX], ['${prefix}'])
   AC_SUBST([PYTHON_EXEC_PREFIX], ['${exec_prefix}'])
 
-  dnl At times (like when building shared libraries) you may want
-  dnl to know which OS platform Python thinks this is.
+  # At times (like when building shared libraries) you may want
+  # to know which OS platform Python thinks this is.
 
   AC_CACHE_CHECK([for $am_display_PYTHON platform], [am_cv_python_platform],
     [am_cv_python_platform=`$PYTHON -c "import sys; sys.stdout.write(sys.platform)"`])
   AC_SUBST([PYTHON_PLATFORM], [$am_cv_python_platform])
 
 
-  dnl Set up 4 directories:
+  # Set up 4 directories:
 
-  dnl pythondir -- where to install python scripts.  This is the
-  dnl   site-packages directory, not the python standard library
-  dnl   directory like in previous automake betas.  This behavior
-  dnl   is more consistent with lispdir.m4 for example.
-  dnl Query distutils for this directory.  distutils does not exist in
-  dnl Python 1.5, so we fall back to the hardcoded directory if it
-  dnl doesn't work.
+  # pythondir -- where to install python scripts.  This is the
+  #   site-packages directory, not the python standard library
+  #   directory like in previous automake betas.  This behavior
+  #   is more consistent with lispdir.m4 for example.
+  # Query distutils for this directory.  distutils does not exist in
+  # Python 1.5, so we fall back to the hardcoded directory if it
+  # doesn't work.
   AC_CACHE_CHECK([for $am_display_PYTHON script directory],
     [am_cv_python_pythondir],
     [am_cv_python_pythondir=`$PYTHON -c "from distutils import sysconfig; print(sysconfig.get_python_lib(0,0,prefix='$PYTHON_PREFIX'))" 2>/dev/null ||
      echo "$PYTHON_PREFIX/lib/python$PYTHON_VERSION/site-packages"`])
   AC_SUBST([pythondir], [$am_cv_python_pythondir])
 
-  dnl pkgpythondir -- $PACKAGE directory under pythondir.  Was
-  dnl   PYTHON_SITE_PACKAGE in previous betas, but this naming is
-  dnl   more consistent with the rest of automake.
+  # pkgpythondir -- $PACKAGE directory under pythondir.  Was
+  #   PYTHON_SITE_PACKAGE in previous betas, but this naming is
+  #   more consistent with the rest of automake.
 
   AC_SUBST([pkgpythondir], [\${pythondir}/$PACKAGE])
 
-  dnl pyexecdir -- directory for installing python extension modules
-  dnl   (shared libraries)
-  dnl Query distutils for this directory.  distutils does not exist in
-  dnl Python 1.5, so we fall back to the hardcoded directory if it
-  dnl doesn't work.
+  # pyexecdir -- directory for installing python extension modules
+  #   (shared libraries)
+  # Query distutils for this directory.  distutils does not exist in
+  # Python 1.5, so we fall back to the hardcoded directory if it
+  # doesn't work.
   AC_CACHE_CHECK([for $am_display_PYTHON extension module directory],
     [am_cv_python_pyexecdir],
     [am_cv_python_pyexecdir=`$PYTHON -c "from distutils import sysconfig; print(sysconfig.get_python_lib(1,0,prefix='$PYTHON_EXEC_PREFIX'))" 2>/dev/null ||
      echo "${PYTHON_EXEC_PREFIX}/lib/python${PYTHON_VERSION}/site-packages"`])
   AC_SUBST([pyexecdir], [$am_cv_python_pyexecdir])
 
-  dnl pkgpyexecdir -- $(pyexecdir)/$(PACKAGE)
+  # pkgpyexecdir -- $(pyexecdir)/$(PACKAGE)
 
   AC_SUBST([pkgpyexecdir], [\${pyexecdir}/$PACKAGE])
 
-  dnl Run any user-specified action.
+  # Run any user-specified action.
   $2
   fi
 

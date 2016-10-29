@@ -8,13 +8,13 @@ AC_PREREQ(2.52)
 m4_define(python_min_ver, 2.5.2)
 m4_define(python3_min_ver, 3.1)
 
-dnl the pygobject version number
+# the pygobject version number
 m4_define(pygobject_major_version, 2)
 m4_define(pygobject_minor_version, 28)
 m4_define(pygobject_micro_version, 6)
 m4_define(pygobject_version, pygobject_major_version.pygobject_minor_version.pygobject_micro_version)
 
-dnl versions of packages we require ...
+# versions of packages we require ...
 m4_define(introspection_required_version, 0.10.2)
 m4_define(pycairo_required_version, 1.2.0)
 m4_define(glib_required_version, 2.24.0)
@@ -39,7 +39,7 @@ m4_ifdef([AM_SILENT_RULES], [AM_SILENT_RULES(yes)])
 AM_INIT_AUTOMAKE(foreign)
 AM_MAINTAINER_MODE
 
-dnl put the ACLOCAL flags in the makefile
+# put the ACLOCAL flags in the makefile
 ACLOCAL="$ACLOCAL $ACLOCAL_FLAGS"
 
 AC_CANONICAL_BUILD
@@ -70,14 +70,14 @@ AM_CONDITIONAL(OS_WIN32, test "$os_win32" = "yes")
 
 AC_DISABLE_STATIC
 
-dnl XXXX hack to kill off all the libtool tags ...
-dnl it isn't like we are using C++ or Fortran.
-dnl (copied from libglade/configure.in)
+# XXXX hack to kill off all the libtool tags ...
+# it isn't like we are using C++ or Fortran.
+# (copied from libglade/configure.in)
 m4_define([_LT_AC_TAGCONFIG],[])
 
 AC_LIBTOOL_WIN32_DLL
 AC_PROG_LIBTOOL
-dnl when using libtool 2.x create libtool early, because it's used in configure
+# when using libtool 2.x create libtool early, because it's used in configure
 m4_ifdef([LT_OUTPUT], [LT_OUTPUT])
 AC_ISC_POSIX
 AC_PROG_CC
@@ -123,31 +123,31 @@ AC_ARG_ENABLE(thread,
   AC_HELP_STRING([--disable-thread], [Disable pygobject threading support]),,
   enable_thread=yes)
 
-dnl Building documentation
+# Building documentation
 AC_ARG_ENABLE(docs,
   AC_HELP_STRING([--enable-docs], [Enable documentation building]),enable_docs=$enableval,
   enable_docs=no)
 if test "${enable_docs}" != no; then
-  dnl
-  dnl Check for xsltproc
-  dnl
+  #
+  # Check for xsltproc
+  #
   AC_PATH_PROG([XSLTPROC], [xsltproc])
   if test -z "$XSLTPROC"; then
     enable_docs=no
   fi
 
-  dnl check for DocBook DTD and stylesheets in the local catalog.
-  dnl JH_CHECK_XML_CATALOG([-//OASIS//DTD DocBook XML V4.1.2//EN],
-  dnl   [DocBook XML DTD V4.1.2],,enable_docs=no)
-  dnl JH_CHECK_XML_CATALOG([http://docbook.sourceforge.net/release/xsl/current/manpages/docbook.xsl],
-  dnl   [DocBook XSL Stylesheets],,enable_docs=no)
+  # check for DocBook DTD and stylesheets in the local catalog.
+  # JH_CHECK_XML_CATALOG([-//OASIS//DTD DocBook XML V4.1.2//EN],
+  #   [DocBook XML DTD V4.1.2],,enable_docs=no)
+  # JH_CHECK_XML_CATALOG([http://docbook.sourceforge.net/release/xsl/current/manpages/docbook.xsl],
+  #   [DocBook XSL Stylesheets],,enable_docs=no)
 fi
 
 AM_CONDITIONAL(ENABLE_DOCS, test x$enable_docs != xno)
 
 AM_CHECK_PYMOD(thread,,,enable_thread=check_for_py3_module)
 if test "x$enable_thread" = xcheck_for_py3_module; then
-  dnl Python 3 uses the _thread module so check for that
+  # Python 3 uses the _thread module so check for that
   AM_CHECK_PYMOD(_thread,,,enable_thread=no)
 fi
 
@@ -164,10 +164,10 @@ fi
 AC_SUBST(THREADING_CFLAGS)
 CPPFLAGS="${CPPFLAGS} $THREADING_CFLAGS"
 
-dnl get rid of the -export-dynamic stuff from the configure flags ...
+# get rid of the -export-dynamic stuff from the configure flags ...
 export_dynamic=`(./libtool --config; echo eval echo \\$export_dynamic_flag_spec) | sh`
 
-dnl glib
+# glib
 AM_PATH_GLIB_2_0(glib_required_version,,[AC_MSG_ERROR(maybe you want the pygobject-2-4 branch?)],gobject $extra_mods)
 if test -n "$export_dynamic"; then
   GLIB_LIBS=`echo $GLIB_LIBS | sed -e "s/$export_dynamic//"`
@@ -179,7 +179,7 @@ pygobject_CODEGEN_DEFINES=""
 AC_SUBST([pygobject_CODEGEN_DEFINES])
 
 
-dnl libffi
+# libffi
 AC_MSG_CHECKING(for ffi)
 AC_ARG_WITH(ffi,
   AC_HELP_STRING([--without-ffi], [Disable libffi support]),
@@ -202,7 +202,7 @@ AC_SUBST(FFI_CFLAGS)
 AC_SUBST(FFI_LIBS)
 AC_SUBST(LIBFFI_PC)
 
-dnl gio
+# gio
 PKG_CHECK_MODULES(GIO, gio-2.0 >= gio_required_version,
 	have_gio=true, have_gio=false)
 AC_SUBST(GIO_CFLAGS)
@@ -216,7 +216,7 @@ if test -n "$export_dynamic"; then
   GIO_LIBS=`echo $GIO_LIBS | sed -e "s/$export_dynamic//"`
 fi
 
-dnl giounix
+# giounix
 PKG_CHECK_MODULES(GIOUNIX, gio-unix-2.0 >= giounix_required_version,
 	have_giounix=true, have_giounix=false)
 AC_SUBST(GIOUNIX_CFLAGS)
@@ -260,10 +260,10 @@ INTROSPECTION_COMPILER=`$PKG_CONFIG --variable=g_ir_compiler gobject-introspecti
 AC_SUBST(INTROSPECTION_SCANNER)
 AC_SUBST(INTROSPECTION_COMPILER)
 
-dnl Do not install codegen for Python 3.
+# Do not install codegen for Python 3.
 AM_CONDITIONAL(ENABLE_CODEGEN, test $build_py3k = false)
 
-dnl add required cflags ...
+# add required cflags ...
 if test "x$GCC" = "xyes"; then
   JH_ADD_CFLAG([-Wall])
   JH_ADD_CFLAG([-fno-strict-aliasing])
