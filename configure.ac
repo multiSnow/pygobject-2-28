@@ -1,4 +1,3 @@
--*- mode: m4 -*-
 AC_PREREQ(2.52)
 
 # The version of python used is determined by the executable pointed to by
