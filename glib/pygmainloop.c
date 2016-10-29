@@ -126,26 +126,7 @@ pyg_signal_watch_prepare(GSource *source,
      * do nothing.
      */
 
-#ifdef HAVE_PYSIGNAL_SETWAKEUPFD
     return FALSE;
-#else /* !HAVE_PYSIGNAL_SETWAKEUPFD */
-    /* On Windows g_poll() won't be interrupted by a signal
-     * (AFAIK), so we need the timeout there too, even if there's
-     * only one thread.
-     */
-#ifndef PLATFORM_WIN32
-    if (!pyglib_threads_enabled())
-	return FALSE;
-#endif /* PLATFORM_WIN32 */
-
-    /* If we're using 2.5 or an earlier version of python we
-     * will default to a timeout every second, be aware,
-     * this will cause unnecessary wakeups, see
-     * http://bugzilla.gnome.org/show_bug.cgi?id=481569
-     */
-    *timeout = 1000;
-    return FALSE;
-#endif /* HAVE_PYSIGNAL_SETWAKEUPFD */
 }
 
 static gboolean
@@ -154,14 +135,12 @@ pyg_signal_watch_check(GSource *source)
     PyGILState_STATE state;
     GMainLoop *main_loop;
 
-#ifdef HAVE_PYSIGNAL_SETWAKEUPFD
     PySignalWatchSource *real_source = (PySignalWatchSource *)source;
     GPollFD *poll_fd = &real_source->fd;
     unsigned char dummy;
     gssize ret;
     if (poll_fd->revents & G_IO_IN)
 	ret = read(poll_fd->fd, &dummy, 1);
-#endif
 
     state = pyglib_gil_state_ensure();
 
@@ -200,7 +179,6 @@ pyg_signal_watch_new(void)
     GSource *source = g_source_new(&pyg_signal_watch_funcs,
 	sizeof(PySignalWatchSource));
 
-#ifdef HAVE_PYSIGNAL_SETWAKEUPFD
     PySignalWatchSource *real_source = (PySignalWatchSource *)source;
     int flag;
 
@@ -229,7 +207,6 @@ pyg_signal_watch_new(void)
 
     if (!already_piped)
       PySignal_SetWakeupFd(pipe_fds[1]);
-#endif
     return source;
 }
 

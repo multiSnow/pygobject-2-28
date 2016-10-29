@@ -5,7 +5,7 @@ AC_PREREQ(2.52)
 # Python 3 as python3 to configure to compile pygobject under Python 3
 # you would do this:
 # $> PYTHON=python3 ./configure
-m4_define(python_min_ver, 2.5.2)
+m4_define(python_min_ver, 2.6)
 m4_define(python3_min_ver, 3.1)
 
 # the pygobject version number
@@ -101,20 +101,6 @@ if test $build_py3k = true ; then
 fi
 
 AM_CHECK_PYTHON_HEADERS(,[AC_MSG_ERROR(could not find Python headers)])
-
-AC_MSG_CHECKING([for PySignal_SetWakeupFd in Python.h])
-old_CPPFLAGS=$CPPFLAGS
-CPPFLAGS="$CPPFLAGS $PYTHON_CFLAGS"
-AC_TRY_COMPILE([#include <Python.h>],
-  [PySignal_SetWakeupFd(0);],
-  setwakeupfd_ok=yes,
-  setwakeupfd_ok=no)
-AC_MSG_RESULT($setwakeupfd_ok)
-if test "x$setwakeupfd_ok" != xno; then
-  AC_DEFINE(HAVE_PYSIGNAL_SETWAKEUPFD, 1,
-                [Define to 1 if PySignal_SetWakeupFd is available])
-fi
-CPPFLAGS=$old_CPPFLAGS
 
 PLATFORM=`$PYTHON -c "import sys; from distutils import util; sys.stdout.write(util.get_platform())"`
 AC_SUBST(PLATFORM)
