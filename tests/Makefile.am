@@ -3,12 +3,17 @@ noinst_LTLIBRARIES =
 if ENABLE_INTROSPECTION
 noinst_LTLIBRARIES += libregress.la libgimarshallingtests.la
 
-nodist_libregress_la_SOURCES = $(GI_DATADIR)/tests/regress.c $(GI_DATADIR)/tests/regress.h
-libregress_la_CFLAGS = $(GIO_CFLAGS) $(PYCAIRO_CFLAGS)
+nodist_libregress_la_SOURCES = regress.h regress.c
+libregress_la_CFLAGS = $(GIO_CFLAGS) $(PYCAIRO_CFLAGS) -I$(GI_DATADIR)/tests
 libregress_la_LDFLAGS = -module -avoid-version $(GIO_LIBS) $(PYCAIRO_LIBS)
-nodist_libgimarshallingtests_la_SOURCES = $(GI_DATADIR)/tests/gimarshallingtests.c $(GI_DATADIR)/tests/gimarshallingtests.h
-libgimarshallingtests_la_CFLAGS = $(GLIB_CFLAGS)
+nodist_libgimarshallingtests_la_SOURCES = gimarshallingtests.h gimarshallingtests.c
+libgimarshallingtests_la_CFLAGS = $(GLIB_CFLAGS) -I$(GI_DATADIR)/tests
 libgimarshallingtests_la_LDFLAGS = -module -avoid-version $(GLIB_LIBS)
+
+regress.h gimarshallingtests.h:
+	$(LN_S) -f $(GI_DATADIR)/tests/$@ $@
+regress.c gimarshallingtests.c: regress.h gimarshallingtests.h
+	$(LN_S) -f $(GI_DATADIR)/tests/$@ $@
 
 # This is a hack to make sure a shared library is built
 libregress.la: $(libregress_la_OBJECTS) $(libregress_la_DEPENDENCIES)
@@ -41,7 +46,7 @@ GIMarshallingTests-1.0.typelib: GIMarshallingTests-1.0.gir Makefile
 	$(AM_V_GEN) g-ir-compiler $< -o $@
 
 gschemas.compiled: org.gnome.test.gschema.xml
-	glib-compile-schemas --targetdir=. --schema-file=$<
+	$(GLIB_COMPILE_SCHEMAS) --targetdir=. --schema-file=$<
 
 CLEANFILES += Regress-1.0.gir Regress-1.0.typelib GIMarshallingTests-1.0.gir GIMarshallingTests-1.0.typelib gschemas.compiled
 endif

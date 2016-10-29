@@ -36,7 +36,7 @@ AC_SUBST(PYGOBJECT_MICRO_VERSION, pygobject_micro_version)
 
 AM_CONFIG_HEADER(config.h)
 m4_ifdef([AM_SILENT_RULES], [AM_SILENT_RULES(yes)])
-AM_INIT_AUTOMAKE([foreign subdir-objects])
+AM_INIT_AUTOMAKE([foreign])
 AM_MAINTAINER_MODE
 
 # put the ACLOCAL flags in the makefile
@@ -236,6 +236,7 @@ if test "$enable_introspection" != no; then
             pycairo >= pycairo_required_version
         )
     fi
+    AC_PATH_PROG([GLIB_COMPILE_SCHEMAS],[glib-compile-schemas])
 fi
 AM_CONDITIONAL(ENABLE_INTROSPECTION, test "$enable_introspection" = "yes")
 AM_CONDITIONAL(ENABLE_CAIRO, test "$enable_cairo" = "yes")
