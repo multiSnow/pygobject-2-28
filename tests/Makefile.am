@@ -48,7 +48,7 @@ endif
 
 noinst_LTLIBRARIES += testhelper.la
 
-testhelper_la_CFLAGS = -I$(top_srcdir)/gobject -I$(top_srcdir)/glib $(PYTHON_INCLUDES) $(GLIB_CFLAGS)
+testhelper_la_CFLAGS = -I$(top_srcdir)/gobject -I$(top_srcdir)/glib $(PYTHON_CFLAGS) $(GLIB_CFLAGS)
 testhelper_la_LDFLAGS = -module -avoid-version
 testhelper_la_LIBADD = $(GLIB_LIBS)
 testhelper_la_SOURCES = \

@@ -22,7 +22,7 @@ endif
 _gobject_la_CFLAGS = \
 	-I$(top_srcdir)/glib \
 	-I$(top_srcdir)/gi \
-	$(PYTHON_INCLUDES) \
+	$(PYTHON_CFLAGS) \
 	$(FFI_CFLAGS) \
 	$(GLIB_CFLAGS) \
 	 -DPY_SSIZE_T_CLEAN

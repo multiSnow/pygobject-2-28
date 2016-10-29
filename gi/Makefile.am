@@ -7,7 +7,7 @@ SUBDIRS = \
 	repository \
 	overrides
 
-INCLUDES = -I$(top_srcdir)/gobject -I$(top_srcdir)/glib
+AM_CPPFLAGS = -I$(top_srcdir)/gobject -I$(top_srcdir)/glib
 
 pygidir = $(pkgpyexecdir)/gi
 pygi_PYTHON = \
@@ -17,7 +17,7 @@ pygi_PYTHON = \
 	__init__.py
 
 _gi_la_CFLAGS = \
-	$(PYTHON_INCLUDES) \
+	$(PYTHON_CFLAGS) \
 	$(GI_CFLAGS)
 _gi_la_LDFLAGS = \
 	-module \
@@ -59,7 +59,7 @@ _gi_la_SOURCES = \
 	gimodule.c
 
 _gi_cairo_la_CFLAGS = \
-	$(PYTHON_INCLUDES) \
+	$(PYTHON_CFLAGS) \
 	$(GI_CFLAGS) \
 	$(PYCAIRO_CFLAGS)
 _gi_cairo_la_LDFLAGS = \

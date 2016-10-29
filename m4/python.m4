@@ -38,26 +38,26 @@ fi
 
 # a macro to check for ability to create python extensions
 #  AM_CHECK_PYTHON_HEADERS([ACTION-IF-POSSIBLE], [ACTION-IF-NOT-POSSIBLE])
-# function also defines PYTHON_INCLUDES
+# function also defines PYTHON_CFLAGS
 AC_DEFUN([AM_CHECK_PYTHON_HEADERS],
 [AC_REQUIRE([AM_PATH_PYTHON])
 AC_MSG_CHECKING(for headers required to compile python extensions)
-# deduce PYTHON_INCLUDES
+# deduce PYTHON_CFLAGS
 py_prefix=`$PYTHON -c "import sys; sys.stdout.write(sys.prefix)"`
 py_exec_prefix=`$PYTHON -c "import sys; sys.stdout.write(sys.exec_prefix)"`
 PYTHON_CONFIG=`which $PYTHON`-config
 if test -x "$PYTHON_CONFIG"; then
-PYTHON_INCLUDES=`$PYTHON_CONFIG --includes 2>/dev/null`
+PYTHON_CFLAGS=`$PYTHON_CONFIG --includes 2>/dev/null`
 else
-PYTHON_INCLUDES="-I${py_prefix}/include/python${PYTHON_VERSION}"
+PYTHON_CFLAGS="-I${py_prefix}/include/python${PYTHON_VERSION}"
 if test "$py_prefix" != "$py_exec_prefix"; then
-  PYTHON_INCLUDES="$PYTHON_INCLUDES -I${py_exec_prefix}/include/python${PYTHON_VERSION}"
+  PYTHON_CFLAGS="$PYTHON_CFLAGS -I${py_exec_prefix}/include/python${PYTHON_VERSION}"
 fi
 fi
-AC_SUBST(PYTHON_INCLUDES)
+AC_SUBST(PYTHON_CFLAGS)
 # check if the headers exist:
 save_CPPFLAGS="$CPPFLAGS"
-CPPFLAGS="$CPPFLAGS $PYTHON_INCLUDES"
+CPPFLAGS="$CPPFLAGS $PYTHON_CFLAGS"
 AC_TRY_CPP([#include <Python.h>],
 [AC_MSG_RESULT(found)
 $1],

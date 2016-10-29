@@ -2,10 +2,10 @@ AUTOMAKE_OPTIONS = 1.7
 
 PLATFORM_VERSION = 2.0
 
-INCLUDES = 				\
+AM_CPPFLAGS = 				\
 	-I$(top_srcdir)/glib		\
 	-I$(top_srcdir)/gobject		\
-	$(PYTHON_INCLUDES) 		\
+	$(PYTHON_CFLAGS) 		\
 	$(PYGOBJECT_CFLAGS)		\
 	$(GIO_CFLAGS)
 

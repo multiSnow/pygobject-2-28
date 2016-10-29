@@ -36,7 +36,7 @@ AC_SUBST(PYGOBJECT_MICRO_VERSION, pygobject_micro_version)
 
 AM_CONFIG_HEADER(config.h)
 m4_ifdef([AM_SILENT_RULES], [AM_SILENT_RULES(yes)])
-AM_INIT_AUTOMAKE(foreign)
+AM_INIT_AUTOMAKE([foreign subdir-objects])
 AM_MAINTAINER_MODE
 
 # put the ACLOCAL flags in the makefile
@@ -104,7 +104,7 @@ AM_CHECK_PYTHON_HEADERS(,[AC_MSG_ERROR(could not find Python headers)])
 
 AC_MSG_CHECKING([for PySignal_SetWakeupFd in Python.h])
 old_CPPFLAGS=$CPPFLAGS
-CPPFLAGS="-Wall -Werror $PYTHON_INCLUDES"
+CPPFLAGS="$CPPFLAGS $PYTHON_CFLAGS"
 AC_TRY_COMPILE([#include <Python.h>],
   [PySignal_SetWakeupFd(0);],
   setwakeupfd_ok=yes,
