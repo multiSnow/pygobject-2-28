@@ -158,7 +158,7 @@ AM_PATH_GLIB_2_0(glib_required_version,,[AC_MSG_ERROR(maybe you want the pygobje
 if test -n "$export_dynamic"; then
   GLIB_LIBS=`echo $GLIB_LIBS | sed -e "s/$export_dynamic//"`
 fi
-PYTHON_BASENAME=`basename $PYTHON`
+PYTHON_BASENAME=python${PYTHON_VERSION}
 AC_SUBST([PYTHON_BASENAME])
 
 pygobject_CODEGEN_DEFINES=""
