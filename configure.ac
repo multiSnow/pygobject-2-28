@@ -100,7 +100,7 @@ if test $build_py3k = true ; then
 			  [AC_MSG_ERROR(too old)])
 fi
 
-AM_CHECK_PYTHON_HEADERS(,[AC_MSG_ERROR(could not find Python headers)])
+AM_CHECK_PYTHON_FLAGS(,[AC_MSG_ERROR(could not find Python headers)])
 
 PLATFORM=`$PYTHON -c "import sys; from distutils import util; sys.stdout.write(util.get_platform())"`
 AC_SUBST(PLATFORM)

@@ -67,7 +67,7 @@ EXTRA_DIST += $(GIO_DEFS) $(GIO_OVERRIDES)
 gio.c: $(GIO_DEFS) $(GIO_OVERRIDES)
 _gio_la_CFLAGS = $(GIO_CFLAGS)
 _gio_la_LDFLAGS = $(common_ldflags) -export-symbols-regex init_gio
-_gio_la_LIBADD = $(GIO_LIBS) $(top_builddir)/glib/libpyglib-2.0-@PYTHON_BASENAME@.la
+_gio_la_LIBADD = $(GIO_LIBS) $(PYTHON_LIBS) $(top_builddir)/glib/libpyglib-2.0-@PYTHON_BASENAME@.la
 _gio_la_SOURCES = \
 	giomodule.c \
 	pygio-utils.c \
@@ -85,7 +85,7 @@ EXTRA_DIST += $(GIOUNIX_DEFS) unix.override
 unix.c: $(GIOUNIX_DEFS) unix.override
 unix_la_CFLAGS = $(GIOUNIX_CFLAGS)
 unix_la_LDFLAGS = $(common_ldflags) -export-symbols-regex initunix
-unix_la_LIBADD = $(GIOUNIX_LIBS)
+unix_la_LIBADD = $(GIOUNIX_LIBS) $(PYTHON_LIBS)
 unix_la_SOURCES = unixmodule.c
 nodist_unix_la_SOURCES = unix.c
 if BUILD_GIOUNIX

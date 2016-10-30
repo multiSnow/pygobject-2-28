@@ -37,18 +37,21 @@ fi
 ])
 
 # a macro to check for ability to create python extensions
-#  AM_CHECK_PYTHON_HEADERS([ACTION-IF-POSSIBLE], [ACTION-IF-NOT-POSSIBLE])
+#  AM_CHECK_PYTHON_FLAGS([ACTION-IF-POSSIBLE], [ACTION-IF-NOT-POSSIBLE])
 # function also defines PYTHON_CFLAGS
-AC_DEFUN([AM_CHECK_PYTHON_HEADERS],
+AC_DEFUN([AM_CHECK_PYTHON_FLAGS],
 [AC_REQUIRE([AM_PATH_PYTHON])
 AC_MSG_CHECKING(for headers required to compile python extensions)
 PYTHON_CONFIG=`which $PYTHON`-config
 if test -x "$PYTHON_CONFIG"; then
 PYTHON_CFLAGS=`$PYTHON_CONFIG --includes 2>/dev/null`
+PYTHON_LIBS=`$PYTHON_CONFIG --ldflags 2>/dev/null`
 else
 PYTHON_CFLAGS=`pkg-config python-${PYTHON_VERSION} --cflags`
+PYTHON_LIBS=`pkg-config python-${PYTHON_VERSION} --libs`
 fi
 AC_SUBST(PYTHON_CFLAGS)
+AC_SUBST(PYTHON_LIBS)
 # check if the headers exist:
 save_CPPFLAGS="$CPPFLAGS"
 CPPFLAGS="$CPPFLAGS $PYTHON_CFLAGS"
